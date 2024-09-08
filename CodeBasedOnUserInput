@@ -1,0 +1,78 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int forrow, forcol, value;
+    Node *next;
+    Node(int r, int c, int v) : forrow(r), forcol(c), value(v), next(nullptr) {}
+};
+
+void appendNode(Node *&head, Node *&tail, int forrow, int forcol, int value) {
+    Node *newNode = new Node(forrow, forcol, value);
+    if (!head) {
+        head = tail = newNode;
+    } else {
+        tail->next = newNode;
+        tail = newNode;
+    }
+}
+
+void SparseMatrix(Node *head) {
+    cout << "row_position: ";
+    for (Node *current = head; current; current = current->next)
+        cout << current->forrow << " ";
+    cout << "\ncolumn_position: ";
+    for (Node *current = head; current; current = current->next)
+        cout << current->forcol << " ";
+    cout << "\nValue: ";
+    for (Node *current = head; current; current = current->next)
+        cout << current->value << " ";
+    cout << endl;
+}
+
+int main() {
+    int rows, cols;
+
+    cout << "Enter Total rows ";
+    cin >> rows;
+    cout << "Enter Total columns: ";
+    cin >> cols;
+
+    int **Matrixelements = new int*[rows];
+    for (int i = 0; i < rows; ++i) {
+        Matrixelements[i] = new int[cols];
+    }
+
+    cout << "Enter the matrix values row-wise:\n";
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            cin >> Matrixelements[i][j];
+        }
+    }
+
+    Node *head = nullptr, *tail = nullptr;
+    for (int row = 0; row < rows; row++) {
+        for (int col = 0; col < cols; col++) {
+            if (Matrixelements[row][col] != 0) {
+                appendNode(head, tail, row, col, Matrixelements[row][col]);
+            }
+        }
+    }
+
+    SparseMatrix(head);
+
+    for (int i = 0; i < rows; ++i) {
+        delete[] Matrixelements[i];
+    }
+    delete[] Matrixelements;
+
+    Node *current = head;
+    while (current) {
+        Node *next = current->next;
+        delete current;
+        current = next;
+    }
+
+    return 0;
+}
