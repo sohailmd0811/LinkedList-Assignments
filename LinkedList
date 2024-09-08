@@ -1,0 +1,53 @@
+#include <iostream>
+using namespace std;
+
+class MatrixNode {
+public:
+    int row, col, value;
+    MatrixNode *next;
+    MatrixNode(int r, int c, int v) : row(r), col(c), value(v), next(nullptr) {}
+};
+
+void appendNode(MatrixNode *&head, MatrixNode *&tail, int row, int col, int value) {
+    MatrixNode *newNode = new MatrixNode(row, col, value);
+    if (!head) {
+        head = tail = newNode;
+    } else {
+        tail->next = newNode;
+        tail = newNode;
+    }
+}
+
+void ForMatrix(MatrixNode *head) {
+    cout << "row_position: ";
+    for (MatrixNode *current = head; current; current = current->next)
+        cout << current->row << " ";
+    cout << "\ncolumn_position: ";
+    for (MatrixNode *current = head; current; current = current->next)
+        cout << current->col << " ";
+    cout << "\nValue: ";
+    for (MatrixNode *current = head; current; current = current->next)
+        cout << current->value << " ";
+    cout << endl;
+}
+
+int main() {
+    int InputMatrix[4][5] = {
+        {0, 0, 3, 0, 4},
+        {0, 0, 5, 7, 0},
+        {0, 0, 0, 0, 0},
+        {0, 2, 6, 0, 0}
+    };
+
+    MatrixNode *head = nullptr, *tail = nullptr;
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 5; col++) {
+            if (InputMatrix[row][col] != 0) {
+                appendNode(head, tail, row, col, InputMatrix[row][col]);
+            }
+        }
+    }
+    ForMatrix(head);
+
+    return 0;
+}
